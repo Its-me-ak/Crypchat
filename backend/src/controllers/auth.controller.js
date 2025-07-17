@@ -2,6 +2,7 @@ import User from "../models/user.model.js";
 import { apiError } from "../utils/apiError.js";
 import { apiResponse } from "../utils/apiResponse.js";
 import { generateTokenAndSetCookie } from "../utils/generateToken.js";
+import bcrypt from "bcryptjs";
 
 export const signup = async (req, res) => {
   const { fullName, email, password } = req.body;
@@ -11,7 +12,7 @@ export const signup = async (req, res) => {
       return apiError(res, 400, "All fields are required");
     }
 
-    if (password < 6) {
+    if (password.length < 6) {
       return apiError(res, 400, "Password must be at least 6 characters");
     }
 
@@ -54,7 +55,31 @@ export const signup = async (req, res) => {
 };
 
 export const login = async (req, res) => {
-  res.send("login function");
+  try {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      return apiError(res, 400, "All fields are required");
+    }
+
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return apiError(res, 401, "Invalid email or password");
+    }
+
+    const isPasswordCorrect = await user.isPasswordMatch(password);
+
+    if (!isPasswordCorrect) {
+      return apiError(res, 401, "Password is incorrect");
+    }
+
+    generateTokenAndSetCookie(user._id, res);
+    return apiResponse(res, 200, "Login successful", user);
+  } catch (error) {
+    console.log(error);
+    return apiError(res, 500, "Internal server error");
+  }
 };
 
 export const logout = (req, res) => {

@@ -53,8 +53,6 @@ const userSchema = new Schema(
   }
 );
 
-const User = mongoose.model("User", userSchema);
-
 // pre hook for password encryption
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
@@ -66,5 +64,11 @@ userSchema.pre("save", async function (next) {
     next(error);
   }
 });
+
+userSchema.methods.isPasswordMatch = async function (password) {
+  return await bcrypt.compare(password, this.password);
+};
+
+const User = mongoose.model("User", userSchema);
 
 export default User;
