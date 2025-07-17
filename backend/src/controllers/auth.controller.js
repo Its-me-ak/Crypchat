@@ -83,5 +83,11 @@ export const login = async (req, res) => {
 };
 
 export const logout = (req, res) => {
-  res.send("logout function");
+  try {
+   res.clearCookie("JWT");
+    return apiResponse(res, 200, "Logout successful");
+  } catch (error) {
+    console.log(error);
+    return apiError(res, 500, "Internal server error");
+  }
 };
