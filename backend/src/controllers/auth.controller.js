@@ -3,6 +3,7 @@ import { apiError } from "../utils/apiError.js";
 import { apiResponse } from "../utils/apiResponse.js";
 import { generateTokenAndSetCookie } from "../utils/generateToken.js";
 import bcrypt from "bcryptjs";
+import { upsertStreamUser } from "../utils/stream.js";
 
 export const signup = async (req, res) => {
   const { fullName, email, password } = req.body;
@@ -40,7 +41,13 @@ export const signup = async (req, res) => {
       profilePic: randomAvatar,
     });
 
-    // TODO: create the user in stream as well
+    await upsertStreamUser({
+      id: newUser._id.toString(),
+      fullName: newUser.fullName,
+      profilePic: newUser.profilePic,
+    })
+    console.log(`Stream user created for ${newUser.fullName}`);
+    
 
     if (newUser) {
       generateTokenAndSetCookie(newUser._id, res);
