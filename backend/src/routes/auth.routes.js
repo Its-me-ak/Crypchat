@@ -1,7 +1,6 @@
 import express from 'express';
 import { getUser, login, logout, onboarding, signup } from '../controllers/auth.controller.js';
 import { protectedRoute } from '../middleware/auth.middleware.js';
-import { apiResponse } from '../utils/apiResponse.js';
 
 const router = express.Router();  
 
