@@ -136,3 +136,16 @@ export const onboarding = async (req, res) => {
     return apiError(res, 500, "Internal server error");
   }
 };
+
+export const getUser = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id).select("-password");
+    if (!user) {
+      return apiError(res, 404, "User not found");
+    }
+    return apiResponse(res, 200, "User found", user);
+  } catch (error) {
+    console.error("Error while getting user", error);
+    return apiError(res, 500, "Internal server error");
+  }
+};
