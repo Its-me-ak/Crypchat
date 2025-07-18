@@ -42,11 +42,10 @@ export const signup = async (req, res) => {
 
     await upsertStreamUser({
       id: newUser._id.toString(),
-      fullName: newUser.fullName,
+      name: newUser.fullName,
       profilePic: newUser.profilePic,
-    })
+    });
     console.log(`Stream user created for ${newUser.fullName}`);
-    
 
     if (newUser) {
       generateTokenAndSetCookie(newUser._id, res);
@@ -90,7 +89,7 @@ export const login = async (req, res) => {
 
 export const logout = (req, res) => {
   try {
-   res.clearCookie("JWT");
+    res.clearCookie("JWT");
     return apiResponse(res, 200, "Logout successful");
   } catch (error) {
     console.log(error);
@@ -98,4 +97,42 @@ export const logout = (req, res) => {
   }
 };
 
-export const onboarding = async (req, res) => {}
+export const onboarding = async (req, res) => {
+  // In protected routes, you can access req.user for authenticated user info.
+  // In unprotected routes (where this middleware is not used), req.user will be undefined.
+  try {
+    const userId = req.user._id;
+    const { fullName, bio, nativeLanguage, learningLanguage, location } =
+      req.body;
+
+    if (
+      !fullName ||
+      !bio ||
+      !nativeLanguage ||
+      !learningLanguage ||
+      !location
+    ) {
+      return apiError(res, 400, "All fields are required");
+    }
+    const updatedUser = await User.findByIdAndUpdate(userId, {
+      ...req.body,
+      isOnboarded: true,
+    }, { new: true });
+
+    if(!updatedUser) {
+      return apiError(res, 400, "Failed to update user");
+    }
+
+    await upsertStreamUser({
+      id: updatedUser._id.toString(),
+      name: updatedUser.fullName,
+      profilePic: updatedUser.profilePic,
+    })
+
+    return apiResponse(res, 200, "Onboarding successful", updatedUser);
+
+  } catch (error) {
+    console.log(error);
+    return apiError(res, 500, "Internal server error");
+  }
+};
