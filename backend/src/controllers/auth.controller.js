@@ -2,7 +2,6 @@ import User from "../models/user.model.js";
 import { apiError } from "../utils/apiError.js";
 import { apiResponse } from "../utils/apiResponse.js";
 import { generateTokenAndSetCookie } from "../utils/generateToken.js";
-import bcrypt from "bcryptjs";
 import { upsertStreamUser } from "../utils/stream.js";
 
 export const signup = async (req, res) => {
@@ -98,3 +97,5 @@ export const logout = (req, res) => {
     return apiError(res, 500, "Internal server error");
   }
 };
+
+export const onboarding = async (req, res) => {}
