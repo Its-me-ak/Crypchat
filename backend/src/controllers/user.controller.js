@@ -68,11 +68,15 @@ export const sendFriendRequest = async (req, res) => {
       $or: [
         { sender: currentLoginUserId, recipient: recipientId },
         { sender: recipientId, recipient: currentLoginUserId },
-      ]
-    })
+      ],
+    });
 
     if (existingRequest) {
-      return apiError(res, 400, "You have already sent a friend request to this user");
+      return apiError(
+        res,
+        400,
+        "You have already sent a friend request to this user"
+      );
     }
 
     const friendRequest = await FriendRequest.create({
@@ -86,7 +90,51 @@ export const sendFriendRequest = async (req, res) => {
       "Friend request sent successfully",
       friendRequest
     );
+  } catch (error) {
+    console.log(error);
+    return apiError(res, 500, "Internal server error");
+  }
+};
 
+export const acceptFriendRequest = async (req, res) => {
+  try {
+    const currentLoginUserId = req.user._id;
+    const { id: requestId } = req.params;
+
+    const friendRequest = await FriendRequest.findById(requestId);
+
+    if (!friendRequest) {
+      return apiError(res, 404, "Friend request not found");
+    }
+
+    // check if the recipient of the friend request is the current login user
+    if (friendRequest.recipient.toString() !== currentLoginUserId.toString()) {
+      return apiError(
+        res,
+        403,
+        "You are not authorized to accept this friend request"
+      );
+    }
+
+    friendRequest.status = "accepted";
+    await friendRequest.save();
+
+    // add each user to each other's friends array
+    // $addToSet is used to avoid duplicates in the friends array
+    await User.findByIdAndUpdate(friendRequest.sender, {
+      $addToSet: { friends: friendRequest.recipient },
+    });
+
+    await User.findByIdAndUpdate(friendRequest.recipient, {
+      $addToSet: { friends: friendRequest.sender },
+    });
+
+    return apiResponse(
+      res,
+      200,
+      "Friend request accepted",
+      friendRequest
+    );
   } catch (error) {
     console.log(error);
     return apiError(res, 500, "Internal server error");
