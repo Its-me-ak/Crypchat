@@ -129,11 +129,53 @@ export const acceptFriendRequest = async (req, res) => {
       $addToSet: { friends: friendRequest.sender },
     });
 
+    return apiResponse(res, 200, "Friend request accepted", friendRequest);
+  } catch (error) {
+    console.log(error);
+    return apiError(res, 500, "Internal server error");
+  }
+};
+
+export const getFriendRequests = async (req, res) => {
+  try {
+    const incomingFriendRequests = await FriendRequest.find({
+      recipient: req.user._id,
+      status: "pending",
+    }).populate(
+      "sender",
+      "fullName profilePic nativeLanguage learningLanguage location"
+    );
+
+    const acceptedFriendRequests = await FriendRequest.find({
+      sender: req.user._id,
+      status: "accepted",
+    }).populate("recipient", "fullName profilePic location");
+
+    return apiResponse(res, 200, "Friend requests fetched successfully", {
+      incomingFriendRequests,
+      acceptedFriendRequests,
+    });
+  } catch (error) {
+    console.log(error);
+    return apiError(res, 500, "Internal server error");
+  }
+};
+
+export const getOutgoingFriendRequests = async (req, res) => {
+  try {
+    const outgoingFriendRequests = await FriendRequest.find({
+      sender: req.user._id,
+      status: "pending",
+    }).populate(
+      "recipient",
+      "fullName profilePic nativeLanguage learningLanguage location"
+    );
+
     return apiResponse(
       res,
       200,
-      "Friend request accepted",
-      friendRequest
+      "Outgoing friend requests fetched successfully",
+      outgoingFriendRequests
     );
   } catch (error) {
     console.log(error);
