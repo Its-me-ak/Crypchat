@@ -1,21 +1,80 @@
-import React from "react";
 import { Route, Routes } from "react-router";
-import { CallPage, ChatPage, HomePage, LoginPage, NotificationPage, OnboardingPage, SignUpPage } from "./pages";
+import {
+  CallPage,
+  ChatPage,
+  HomePage,
+  LoginPage,
+  NotificationPage,
+  OnboardingPage,
+  SignUpPage,
+} from "./pages";
 import { Toaster } from "react-hot-toast";
+import { useQuery } from "@tanstack/react-query";
+import { axiosInstance } from "./utils/axios";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
+  const {
+    data: authData,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["authUser"],
+    queryFn: async () => {
+      const response = await axiosInstance.get("/auth/me");
+      return response.data;
+    },
+    retry: false, // disable auto retry on error, without retry: false, React Query by default retries failed queries 3 times
+  });
+  const authUser = authData?.user;
+
   return (
     <div className="h-screen" data-theme="coffee">
       <Routes>
-        <Route path="/" element={<HomePage />} />
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute authUser={authUser}>
+              <HomePage />
+            </ProtectedRoute>
+          }
+        />
         <Route path="/signup" element={<SignUpPage />} />
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/notifications" element={< NotificationPage/>} />
-        <Route path="/call" element={<CallPage/>} />
-        <Route path="/chat" element={<ChatPage/>} />
-        <Route path="/onboarding" element={<OnboardingPage/>} />
+        <Route
+          path="/notifications"
+          element={
+            <ProtectedRoute authUser={authUser}>
+              <NotificationPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/call"
+          element={
+            <ProtectedRoute authUser={authUser}>
+              <CallPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/chat"
+          element={
+            <ProtectedRoute authUser={authUser}>
+              <ChatPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/onboarding"
+          element={
+            <ProtectedRoute authUser={authUser}>
+              <OnboardingPage />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
-      <Toaster/>
+      <Toaster />
     </div>
   );
 }
