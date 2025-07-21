@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router";
+import { Route, Routes, Navigate } from "react-router";
 import {
   CallPage,
   ChatPage,
@@ -26,10 +26,11 @@ function App() {
     },
     retry: false, // disable auto retry on error, without retry: false, React Query by default retries failed queries 3 times
   });
-  const authUser = authData?.user;
+  
+  const authUser = authData?.data;
 
   return (
-    <div className="h-screen" data-theme="coffee">
+    <div className="h-screen" data-theme="forest">
       <Routes>
         <Route
           path="/"
@@ -39,8 +40,14 @@ function App() {
             </ProtectedRoute>
           }
         />
-        <Route path="/signup" element={<SignUpPage />} />
-        <Route path="/login" element={<LoginPage />} />
+        <Route
+          path="/signup"
+          element={!authUser ? <SignUpPage /> : <Navigate to="/" replace />}
+        />
+        <Route
+          path="/login"
+          element={!authUser ? <LoginPage /> : <Navigate to="/" replace />}
+        />
         <Route
           path="/notifications"
           element={
