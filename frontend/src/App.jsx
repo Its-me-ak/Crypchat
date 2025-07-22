@@ -77,7 +77,13 @@ function App() {
           path="/onboarding"
           element={
             <ProtectedRoute isAuthenticated={isAuthenticated}>
-              <OnboardingPage />
+              {
+                !isOnboarded ? (
+                  <OnboardingPage />
+                ) : (
+                  <Navigate to="/" replace />
+                )
+              }
             </ProtectedRoute>
           }
         />
