@@ -9,49 +9,50 @@ import {
   SignUpPage,
 } from "./pages";
 import { Toaster } from "react-hot-toast";
-import { useQuery } from "@tanstack/react-query";
-import { axiosInstance } from "./utils/axios";
 import ProtectedRoute from "./components/ProtectedRoute";
+import Loader from "./components/Loader";
+import useAuthUser from "./hooks/useAuthUser";
 
 function App() {
-  const {
-    data: authData,
-    isLoading,
-    error,
-  } = useQuery({
-    queryKey: ["authUser"],
-    queryFn: async () => {
-      const response = await axiosInstance.get("/auth/me");
-      return response.data;
-    },
-    retry: false, // disable auto retry on error, without retry: false, React Query by default retries failed queries 3 times
-  });
-  
-  const authUser = authData?.data;
+  const { isLoading, authUser } = useAuthUser();
+
+  const isAuthenticated = Boolean(authUser);
+
+  const isOnboarded = authUser?.isOnboarded;
+
+  if (isLoading) return <Loader />;
 
   return (
-    <div className="h-screen" data-theme="forest">
+    <div className="h-screen" data-theme="coffee">
       <Routes>
         <Route
           path="/"
           element={
-            <ProtectedRoute authUser={authUser}>
-              <HomePage />
+            <ProtectedRoute isAuthenticated={isAuthenticated}>
+              {isOnboarded ? (
+                <HomePage />
+              ) : (
+                <Navigate to="/onboarding" replace />
+              )}
             </ProtectedRoute>
           }
         />
         <Route
           path="/signup"
-          element={!authUser ? <SignUpPage /> : <Navigate to="/" replace />}
+          element={
+            !isAuthenticated ? <SignUpPage /> : <Navigate to="/" replace />
+          }
         />
         <Route
           path="/login"
-          element={!authUser ? <LoginPage /> : <Navigate to="/" replace />}
+          element={
+            !isAuthenticated ? <LoginPage /> : <Navigate to="/" replace />
+          }
         />
         <Route
           path="/notifications"
           element={
-            <ProtectedRoute authUser={authUser}>
+            <ProtectedRoute isAuthenticated={isAuthenticated}>
               <NotificationPage />
             </ProtectedRoute>
           }
@@ -59,7 +60,7 @@ function App() {
         <Route
           path="/call"
           element={
-            <ProtectedRoute authUser={authUser}>
+            <ProtectedRoute isAuthenticated={isAuthenticated}>
               <CallPage />
             </ProtectedRoute>
           }
@@ -67,7 +68,7 @@ function App() {
         <Route
           path="/chat"
           element={
-            <ProtectedRoute authUser={authUser}>
+            <ProtectedRoute isAuthenticated={isAuthenticated}>
               <ChatPage />
             </ProtectedRoute>
           }
@@ -75,7 +76,7 @@ function App() {
         <Route
           path="/onboarding"
           element={
-            <ProtectedRoute authUser={authUser}>
+            <ProtectedRoute isAuthenticated={isAuthenticated}>
               <OnboardingPage />
             </ProtectedRoute>
           }

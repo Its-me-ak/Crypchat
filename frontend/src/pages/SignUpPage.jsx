@@ -3,7 +3,7 @@ import { Link } from "react-router";
 import { MdOutlineChat } from "react-icons/md";
 import { FaEye, FaHeart } from "react-icons/fa";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { axiosInstance } from "../utils/axios";
+import {signup} from "../utils/api"
 
 const SignUpPage = () => {
   const queryClient = useQueryClient();
@@ -14,19 +14,16 @@ const SignUpPage = () => {
     password: "",
   });
 
- const {mutate, isPending, error} = useMutation({
-   mutationFn: async () => {
-    const response = await axiosInstance.post("/auth/signup", signupData);
-    return response.data
-   },
+ const { mutate:signupMutation, isPending, error } = useMutation({
+   mutationFn: signup,
    onSuccess: () => {
-    queryClient.invalidateQueries(["authUser"])
+     queryClient.invalidateQueries({ queryKey: ["authUser"] });
    },
- })
+ });
 
   const handleSignUp = (e) => {
     e.preventDefault();
-    mutate();
+    signupMutation(signupData);
   };
   return (
     <div className="min-h-screen bg-cover bg-center bg-[#4eac6d]">
@@ -55,12 +52,12 @@ const SignUpPage = () => {
         </div>
 
         <div className="col-span-12 lg:col-span-8 xl:col-span-9">
-          <div className="rounded-2xl m-6 bg-white  xl:h-[calc(100vh-50px)] lg:h-[calc(100vh-5px)]">
-            <div className="flex flex-col h-full pt-6 px-6">
+          <div className="rounded-2xl m-4 bg-white  xl:h-[calc(100vh-35px)] lg:h-[calc(100vh-5px)]">
+            <div className="flex flex-col h-full pt-5 px-6">
               <div className="flex justify-center my-auto">
                 <div className="w-2/5">
                   <div className="md:py-1 py-6">
-                    <div className="text-center mb-12">
+                    <div className="text-center mb-10">
                       <h3 className="text-2xl text-[#495057] font-semibold">
                         Register Account
                       </h3>
@@ -68,7 +65,7 @@ const SignUpPage = () => {
                         Get your free Crypchat account now.
                       </p>
                     </div>
-                    <form className="space-y-6" onSubmit={handleSignUp}>
+                    <form className="space-y-5" onSubmit={handleSignUp}>
                       {/* full name */}
                       <div>
                         <label className="block mb-2 text-sm font-medium text-gray-700 ">
@@ -164,7 +161,7 @@ const SignUpPage = () => {
 
                       {/* ERROR MESSAGE IF ANY */}
                       {error && (
-                        <div className="alert alert-error mb-4">
+                        <div className="alert alert-error mb-3">
                           <span>{error.response.data.message}</span>
                         </div>
                       )}
@@ -182,14 +179,14 @@ const SignUpPage = () => {
                       </button>
 
                       {/* Divider */}
-                      <div className="flex items-center gap-4 my-4">
+                      <div className="flex items-center gap-4 my-3">
                         <hr className="flex-grow border-gray-300" />
                         <span className="text-sm text-gray-500">Or</span>
                         <hr className="flex-grow border-gray-300" />
                       </div>
 
                       {/* Login Link */}
-                      <p className="text-center text-sm text-gray-600 mt-5">
+                      <p className="text-center text-sm text-gray-600 mt-3">
                         Already have an account?{" "}
                         <Link
                           to="/login"
