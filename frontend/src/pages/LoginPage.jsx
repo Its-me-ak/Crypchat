@@ -1,8 +1,34 @@
 import { Link } from "react-router";
 import Logo from "../components/Logo";
 import { Heart, Eye } from "lucide-react";
+import { useState } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { login } from "../utils/api";
 
 const LoginPage = () => {
+  const queryClient = useQueryClient();
+
+  const [loginData, setLoginData] = useState({
+    email: "",
+    password: "",
+  });
+
+  const {
+    mutate: loginMutation,
+    isPending,
+    error,
+  } = useMutation({
+    mutationFn: login,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["authUser"] });
+    },
+  });
+  
+  const handleLogin = (e) => {
+    e.preventDefault();
+    loginMutation(loginData);
+  };
+
   return (
     <div className="min-h-screen bg-cover bg-center bg-[#4eac6d]">
       <div className="grid grid-cols-12 gap-0">
@@ -33,7 +59,7 @@ const LoginPage = () => {
                         Sign in to continue to Crypchat.
                       </p>
                     </div>
-                    <form className="space-y-5">
+                    <form className="space-y-5" onSubmit={handleLogin}>
                       {/* Email */}
                       <div>
                         <label className="block mb-2 text-sm font-medium text-gray-700 ">
@@ -42,8 +68,14 @@ const LoginPage = () => {
                         <input
                           type="email"
                           placeholder="Enter Email"
-                          value={""}
+                          value={loginData.email}
                           className="w-full text-gray-500 bg-transparent px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-green-500"
+                          onChange={(e) =>
+                            setLoginData({
+                              ...loginData,
+                              email: e.target.value,
+                            })
+                          }
                           required
                         />
                       </div>
@@ -65,8 +97,14 @@ const LoginPage = () => {
                           <input
                             type="password"
                             placeholder="Enter Password"
-                            value={""}
+                            value={loginData.password}
                             className="w-full text-gray-500 bg-transparent px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 pr-10"
+                            onChange={(e) =>
+                              setLoginData({
+                                ...loginData,
+                                password: e.target.value,
+                              })
+                            }
                             required
                           />
                           <span className="absolute inset-y-0 right-3 flex items-center text-gray-400 cursor-pointer">
@@ -76,13 +114,22 @@ const LoginPage = () => {
                       </div>
 
                       {/* ERROR MESSAGE IF ANY */}
+                      {error && (
+                        <div className="alert alert-error mb-3">
+                          <span>{error.response.data.message}</span>
+                        </div>
+                      )}
 
                       {/* Login Button */}
                       <button
                         type="submit"
                         className="btn w-full bg-[#4eac6d] border-none text-white text-[16px] hover:bg-[#479d64]"
                       >
-                        Login
+                        {isPending ? (
+                          <span className="loading loading-spinner text-white"></span>
+                        ) : (
+                          "Login"
+                        )}
                       </button>
 
                       {/* Divider */}

@@ -29,6 +29,7 @@ const SignUpPage = () => {
     e.preventDefault();
     signupMutation(signupData);
   };
+  
   return (
     <div className="min-h-screen bg-cover bg-center bg-[#4eac6d]">
       <div className="grid grid-cols-12 gap-0">
