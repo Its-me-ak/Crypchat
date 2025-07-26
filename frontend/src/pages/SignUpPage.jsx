@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { Link } from "react-router";
-import { MdOutlineChat } from "react-icons/md";
-import { FaEye, FaHeart } from "react-icons/fa";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import {signup} from "../utils/api"
+import { signup } from "../utils/api";
+import  {Heart, Eye } from "lucide-react";
+import Logo from "../components/Logo";
 
 const SignUpPage = () => {
   const queryClient = useQueryClient();
@@ -14,12 +14,16 @@ const SignUpPage = () => {
     password: "",
   });
 
- const { mutate:signupMutation, isPending, error } = useMutation({
-   mutationFn: signup,
-   onSuccess: () => {
-     queryClient.invalidateQueries({ queryKey: ["authUser"] });
-   },
- });
+  const {
+    mutate: signupMutation,
+    isPending,
+    error,
+  } = useMutation({
+    mutationFn: signup,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["authUser"] });
+    },
+  });
 
   const handleSignUp = (e) => {
     e.preventDefault();
@@ -30,17 +34,7 @@ const SignUpPage = () => {
       <div className="grid grid-cols-12 gap-0">
         <div className="col-span-12 lg:col-span-4 xl:col-span-3">
           <div className="p-6 pb-0 lg:p-12 flex flex-col h-screen">
-            <div className="">
-              <h3 className="text-white/90 text-2xl font-bold pb-1">
-                <Link to="/" className="flex items-end gap-3">
-                  <MdOutlineChat />
-                  CrypChat
-                </Link>
-              </h3>
-              <p className="text-white/70 font-medium">
-                Talk Freely, Chat Securely
-              </p>
-            </div>
+            <Logo />
             <div className="mt-auto">
               <img
                 src="/assets/img/auth-img.png"
@@ -112,12 +106,6 @@ const SignUpPage = () => {
                           <label className="text-sm font-medium text-gray-700">
                             Password
                           </label>
-                          <Link
-                            href="#"
-                            className="text-sm text-gray-500 hover:underline"
-                          >
-                            Forgot password?
-                          </Link>
                         </div>
                         <div className="relative">
                           <input
@@ -134,7 +122,7 @@ const SignUpPage = () => {
                             required
                           />
                           <span className="absolute inset-y-0 right-3 flex items-center text-gray-400 cursor-pointer">
-                            <FaEye size={18} />
+                            <Eye size={18} />
                           </span>
                         </div>
 
@@ -201,8 +189,8 @@ const SignUpPage = () => {
               </div>
               <div className="flex w-full justify-center ">
                 <p className="mb-5 flex items-end text-center">
-                  © 2025 Crypchat. Created with{" "}
-                  <FaHeart className="text-red-700 mb-1 mx-1" />
+                  © 2025 Crypchat. Created with
+                  <Heart className="text-red-700 mb-0.5 mx-1" size={16} />
                   by Mohd Aquib
                 </p>
               </div>

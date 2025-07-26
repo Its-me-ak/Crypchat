@@ -3,14 +3,9 @@ import useAuthUser from "../hooks/useAuthUser";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { completeOnboarding } from "../utils/api";
-import { Link } from "react-router";
-import { MdOutlineChat } from "react-icons/md";
-import { FaHeart, FaCameraRetro } from "react-icons/fa";
-import { FaShuffle } from "react-icons/fa6";
-import { LuShipWheel } from "react-icons/lu";
-import { FiMapPin } from "react-icons/fi";
 import { LANGUAGES } from "../constants";
-import { error } from "console";
+import Logo from "../components/Logo";
+import { MapPin, Heart, ShipWheel, Shuffle } from "lucide-react";
 
 const OnboardingPage = () => {
   const { authUser } = useAuthUser();
@@ -25,7 +20,11 @@ const OnboardingPage = () => {
     profilePic: authUser?.profilePic || "",
   });
 
-  const { mutate: onboardingMutation, isPending } = useMutation({
+  const {
+    mutate: onboardingMutation,
+    isPending,
+    error,
+  } = useMutation({
     mutationFn: completeOnboarding,
     onSuccess: () => {
       toast.success("Profile onboarded successfully");
@@ -40,7 +39,6 @@ const OnboardingPage = () => {
     e.preventDefault();
     onboardingMutation(formState);
   };
-  
 
   const handleAvatarGenerate = () => {
     const idx = Math.floor(Math.random() * 100) + 1;
@@ -54,17 +52,8 @@ const OnboardingPage = () => {
       <div className="grid grid-cols-12 gap-0">
         <div className="col-span-12 lg:col-span-4 xl:col-span-3">
           <div className="p-6 pb-0 lg:p-12 flex flex-col h-screen">
-            <div className="">
-              <h3 className="text-white/90 text-2xl font-bold pb-1">
-                <Link to="/" className="flex items-end gap-3">
-                  <MdOutlineChat />
-                  CrypChat
-                </Link>
-              </h3>
-              <p className="text-white/70 font-medium">
-                Talk Freely, Chat Securely
-              </p>
-            </div>
+            {/* Logo */}
+            <Logo />
             <div className="mt-auto">
               <img
                 src="/assets/img/auth-img.png"
@@ -105,7 +94,7 @@ const OnboardingPage = () => {
                             />
                           ) : (
                             <div className="flex items-center justify-center h-full">
-                              <FaCameraRetro className="size-12 text-base-content opacity-40" />
+                              <Camera className="size-12 text-base-content opacity-40" />
                             </div>
                           )}
                         </div>
@@ -116,7 +105,7 @@ const OnboardingPage = () => {
                             className="btn btn-accent"
                             onClick={handleAvatarGenerate}
                           >
-                            <FaShuffle className="size-4 mr-1" />
+                            <Shuffle className="size-4 mr-1" />
                             Generate Random Avatar
                           </button>
                         </div>
@@ -224,25 +213,27 @@ const OnboardingPage = () => {
                       {/* Location */}
                       <div className="form-control">
                         <label className="label">
-                          <span className="label-text font-medium"> Location</span>
+                          <span className="label-text font-medium">
+                            {" "}
+                            Location
+                          </span>
                         </label>
                         <div className="relative">
-
-                        <FiMapPin className="absolute top-1/2 transform -translate-y-1/2 left-3 size-5 text-base-content opacity-70" />
-                        <input
-                          type="text"
-                          placeholder="City, Country"
-                          value={formState.location}
-                          className="input input-bordered w-full pl-10"
-                          onChange={(e) =>
-                            setFormState({
-                              ...formState,
-                              location: e.target.value,
-                            })
-                          }
-                          required
+                          <MapPin className="absolute top-1/2 transform -translate-y-1/2 left-3 size-5 text-base-content opacity-70" />
+                          <input
+                            type="text"
+                            placeholder="City, Country"
+                            value={formState.location}
+                            className="input input-bordered w-full pl-10"
+                            onChange={(e) =>
+                              setFormState({
+                                ...formState,
+                                location: e.target.value,
+                              })
+                            }
+                            required
                           />
-                          </div>
+                        </div>
                       </div>
 
                       {/* ERROR MESSAGE IF ANY */}
@@ -262,7 +253,7 @@ const OnboardingPage = () => {
                           <span className="loading loading-spinne"></span>
                         ) : (
                           <>
-                            <LuShipWheel className="size-4" />
+                            <ShipWheel className="size-4" />
                             Complete Onboarding
                           </>
                         )}
@@ -273,8 +264,8 @@ const OnboardingPage = () => {
               </div>
               <div className="flex w-full justify-center ">
                 <p className="mb-5 flex items-end text-center">
-                  © 2025 Crypchat. Created with{" "}
-                  <FaHeart className="text-red-700 mb-1 mx-1" />
+                  © 2025 Crypchat. Created with
+                  <Heart className="text-red-700 mb-0.5 mx-1" size={16} />
                   by Mohd Aquib
                 </p>
               </div>
