@@ -2,28 +2,17 @@ import { Link } from "react-router";
 import Logo from "../components/Logo";
 import { Heart, Eye } from "lucide-react";
 import { useState } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { login } from "../utils/api";
+import useLogin from "../hooks/useLogin";
 
 const LoginPage = () => {
-  const queryClient = useQueryClient();
 
   const [loginData, setLoginData] = useState({
     email: "",
     password: "",
   });
 
-  const {
-    mutate: loginMutation,
-    isPending,
-    error,
-  } = useMutation({
-    mutationFn: login,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["authUser"] });
-    },
-  });
-  
+  const { isPending, error, loginMutation } = useLogin();
+
   const handleLogin = (e) => {
     e.preventDefault();
     loginMutation(loginData);

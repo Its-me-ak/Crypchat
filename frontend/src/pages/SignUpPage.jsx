@@ -1,12 +1,10 @@
 import React, { useState } from "react";
 import { Link } from "react-router";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { signup } from "../utils/api";
 import  {Heart, Eye } from "lucide-react";
 import Logo from "../components/Logo";
+import useSignUp from "../hooks/useSignUp";
 
 const SignUpPage = () => {
-  const queryClient = useQueryClient();
 
   const [signupData, setSignupData] = useState({
     fullName: "",
@@ -14,16 +12,7 @@ const SignUpPage = () => {
     password: "",
   });
 
-  const {
-    mutate: signupMutation,
-    isPending,
-    error,
-  } = useMutation({
-    mutationFn: signup,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["authUser"] });
-    },
-  });
+  const {signupMutation, isPending, error} = useSignUp()
 
   const handleSignUp = (e) => {
     e.preventDefault();
