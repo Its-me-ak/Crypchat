@@ -12,6 +12,7 @@ import { Toaster } from "react-hot-toast";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Loader from "./components/Loader";
 import useAuthUser from "./hooks/useAuthUser";
+import Layout from "./components/Layout";
 
 function App() {
   const { isLoading, authUser } = useAuthUser();
@@ -23,14 +24,16 @@ function App() {
   if (isLoading) return <Loader />;
 
   return (
-    <div className="h-screen" data-theme="coffee">
+    <div className="h-screen" data-theme="forest">
       <Routes>
         <Route
           path="/"
           element={
             <ProtectedRoute isAuthenticated={isAuthenticated}>
               {isOnboarded ? (
-                <HomePage />
+                <Layout showSidebar>
+                  <HomePage />
+                </Layout>
               ) : (
                 <Navigate to="/onboarding" replace />
               )}
