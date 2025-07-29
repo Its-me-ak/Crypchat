@@ -13,10 +13,11 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import Loader from "./components/Loader";
 import useAuthUser from "./hooks/useAuthUser";
 import Layout from "./components/Layout";
+import { useThemeStore } from "./store/useThemeStore";
 
 function App() {
   const { isLoading, authUser } = useAuthUser();
-
+  const { theme } = useThemeStore();
   const isAuthenticated = Boolean(authUser);
 
   const isOnboarded = authUser?.isOnboarded;
@@ -24,7 +25,7 @@ function App() {
   if (isLoading) return <Loader />;
 
   return (
-    <div className="h-screen" data-theme="forest">
+    <div className="h-screen" data-theme={theme}>
       <Routes>
         <Route
           path="/"
@@ -43,13 +44,21 @@ function App() {
         <Route
           path="/signup"
           element={
-            !isAuthenticated ? <SignUpPage /> : <Navigate to={isOnboarded ? "/" : "/onboarding"} replace />
+            !isAuthenticated ? (
+              <SignUpPage />
+            ) : (
+              <Navigate to={isOnboarded ? "/" : "/onboarding"} replace />
+            )
           }
         />
         <Route
           path="/login"
           element={
-            !isAuthenticated ? <LoginPage /> : <Navigate to={isOnboarded ? "/" : "/onboarding"} replace />
+            !isAuthenticated ? (
+              <LoginPage />
+            ) : (
+              <Navigate to={isOnboarded ? "/" : "/onboarding"} replace />
+            )
           }
         />
         <Route
@@ -80,13 +89,7 @@ function App() {
           path="/onboarding"
           element={
             <ProtectedRoute isAuthenticated={isAuthenticated}>
-              {
-                !isOnboarded ? (
-                  <OnboardingPage />
-                ) : (
-                  <Navigate to="/" replace />
-                )
-              }
+              {!isOnboarded ? <OnboardingPage /> : <Navigate to="/" replace />}
             </ProtectedRoute>
           }
         />
