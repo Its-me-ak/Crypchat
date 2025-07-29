@@ -22,7 +22,6 @@ const HomePage = () => {
   });
 
   const friends = friendsResponse?.data || [];
-  console.log(friends);
 
   const { data: recommendedUserResponse, isLoading: loadingRecommendedUser } =
     useQuery({
@@ -36,6 +35,7 @@ const HomePage = () => {
     queryKey: ["outgoingFriendRequests"],
     queryFn: getOutgoingFriendRequests,
   });
+  
 
   const { mutate: sendRequestMutation, isPending } = useMutation({
     mutationFn: sendFriendRequest,
@@ -44,15 +44,15 @@ const HomePage = () => {
     },
   });
 
-  useEffect(() => {
+useEffect(() => {
+  if (outgoingFriendRequests?.data?.length > 0) {
     const outgoingRequestsIds = new Set();
-    if (outgoingFriendRequests && outgoingFriendRequests.length > 0) {
-      outgoingFriendRequests.forEach((request) => {
-        outgoingRequestsIds.add(request.id);
-      });
-      setOutgoingRequestsIds(outgoingRequestsIds);
-    }
-  }, [outgoingFriendRequests]);
+    outgoingFriendRequests.data.forEach((request) => {
+      outgoingRequestsIds.add(request.recipient._id);
+    });
+    setOutgoingRequestsIds(outgoingRequestsIds);
+  }
+}, [outgoingFriendRequests]);
 
   return (
     <div className="p-3 sm:p-6 lg:p-8">
@@ -112,7 +112,8 @@ const HomePage = () => {
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {recommendedUsers.map((user) => {
-                const isOutgoingRequest = outgoingRequestsIds.has(user.id);
+                const isOutgoingRequest = outgoingRequestsIds.has(user._id);
+                
                 return (
                   <div
                     key={user._id}
