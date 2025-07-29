@@ -11,6 +11,7 @@ import {
 import FriendCard from "../components/FriendCard";
 import NoFriendFound from "../components/NoFriendFound";
 import { getLanguageFlag } from "../utils/languageFlag";
+import { capitialize } from "../utils/cap";
 
 const HomePage = () => {
   const queryClient = useQueryClient();
@@ -190,5 +191,3 @@ useEffect(() => {
 };
 
 export default HomePage;
-
-const capitialize = (str) => str.charAt(0).toUpperCase() + str.slice(1);

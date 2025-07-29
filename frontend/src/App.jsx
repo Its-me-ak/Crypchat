@@ -65,7 +65,13 @@ function App() {
           path="/notifications"
           element={
             <ProtectedRoute isAuthenticated={isAuthenticated}>
-              <NotificationPage />
+              {isOnboarded ? (
+                <Layout showSidebar>
+                  <NotificationPage />
+                </Layout>
+              ) : (
+                <Navigate to="/onboarding" replace />
+              )}
             </ProtectedRoute>
           }
         />
