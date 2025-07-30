@@ -84,10 +84,18 @@ function App() {
           }
         />
         <Route
-          path="/chat"
+          path="/chat/:id"
           element={
             <ProtectedRoute isAuthenticated={isAuthenticated}>
-              <ChatPage />
+             {
+              isOnboarded ? (
+                <Layout showSidebar={false}>
+                  <ChatPage />
+                </Layout>
+              ) : (
+                <Navigate to="/onboarding" replace />
+              )
+             }
             </ProtectedRoute>
           }
         />

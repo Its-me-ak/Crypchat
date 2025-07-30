@@ -4,7 +4,6 @@ import { Link } from "react-router";
 import { MapPinIcon } from "lucide-react";
 
 const FriendCard = ({ friend }) => {
-  console.log(friend);
 
   return (
     <div className="card bg-base-200 hover:shadow-md transition-shadow">
