@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { acceptFriendRequest, getFriendRequests } from "../utils/api";
-import { UserCheckIcon } from "lucide-react";
+import { BellIcon, ClockIcon, MessageSquareIcon, UserCheckIcon } from "lucide-react";
 
 const NotificationPage = () => {
   const queryClient = useQueryClient();
@@ -79,6 +79,54 @@ const NotificationPage = () => {
                           >
                             Accept
                           </button>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </section>
+            )}
+            {/* Accepted Friend Requests */}
+            {acceptedRequests.length > 0 && (
+              <section className="space-y-4">
+                <h2 className="text-xl font-semibold flex items-center gap-2">
+                  <BellIcon className="h-5 w-5 text-primary" />
+                  New Connections
+                </h2>
+                <div className="space-y-3">
+                  {acceptedRequests.map((notification) => (
+                    <div
+                      key={notification._id}
+                      className="card bg-base-200 shadow-sm hover:shadow-md transition-shadow"
+                    >
+                      <div className="card-body p-4">
+                        <div className="flex items-start gap-3">
+                          <div className="avatar mt-2 size-10 rounded-full">
+                            <img
+                              src={notification.recipient.profilePic}
+                              alt={notification.recipient.fullName}
+                            />
+                          </div>
+
+                          <div className="flex-1">
+                            <h3 className="font-semibold">
+                              {notification.recipient.fullName}
+                            </h3>
+
+                            <p className="text-sm my-1">
+                              {notification.recipient.fullName} has accepted your friend request.
+                            </p>
+
+                            <p className="text-xs flex items-center opacity-75">
+                              <ClockIcon className="h-3 w-3 mr-1" />
+                              Recently
+                            </p>
+                          </div>
+
+                          <div className="badge badge-success">
+                            <MessageSquareIcon className="h-3 w-3 mr-1" />
+                            New Friend
+                          </div>
                         </div>
                       </div>
                     </div>
