@@ -76,10 +76,18 @@ function App() {
           }
         />
         <Route
-          path="/call"
+          path="/call/:id"
           element={
             <ProtectedRoute isAuthenticated={isAuthenticated}>
-              <CallPage />
+              {
+                isOnboarded ? (
+                  <Layout>
+                    <CallPage />
+                  </Layout>
+                ) : (
+                  <Navigate to="/onboarding" replace />
+                )
+              }
             </ProtectedRoute>
           }
         />
@@ -89,7 +97,7 @@ function App() {
             <ProtectedRoute isAuthenticated={isAuthenticated}>
              {
               isOnboarded ? (
-                <Layout showSidebar={false}>
+                <Layout>
                   <ChatPage />
                 </Layout>
               ) : (
