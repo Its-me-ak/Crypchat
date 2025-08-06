@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import useAuthUser from "../hooks/useAuthUser";
 import { useQuery } from "@tanstack/react-query";
 import { getStreamToken } from "../utils/api";
@@ -11,6 +11,7 @@ import {
   MessageInput,
   Thread,
   Window,
+  ChannelList,
 } from "stream-chat-react";
 import { StreamChat } from "stream-chat";
 import {toast} from "react-hot-toast"
@@ -20,7 +21,7 @@ const STREAM_API_KEY = import.meta.env.VITE_STREAM_API_KEY;
 
 const ChatPage = () => {
   const { id: targetChatUserId } = useParams();
-
+  const navigate = useNavigate();
   const [chatClient, setChatClient] = useState(null);
   const [chatChannel, setChatChannel] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -32,14 +33,14 @@ const ChatPage = () => {
     queryFn: getStreamToken,
     enabled: !!authUser, // this will run only when authUser is available
   });
-  console.log(tokenData);
+  // console.log(tokenData);
 
   useEffect(() => {
     const initChat = async () => {
       if (!tokenData || !authUser) return;
 
       try {
-        console.log("Initializing chat client with token:", tokenData.data);
+        // console.log("Initializing chat client with token:", tokenData.data);
         const client = StreamChat.getInstance(STREAM_API_KEY);
 
         await client.connectUser(
@@ -73,22 +74,70 @@ const ChatPage = () => {
 
   if(isLoading || !chatClient || !chatChannel) return <ChatLoader />;
 
-  return (
-    <div className="h-[91.3vh]">
-      <Chat client={chatClient}>
-        <Channel channel={chatChannel}>
-          <div className="w-full relative">
-            <Window>
-              <ChannelHeader />
-              <MessageList />
-              <MessageInput focus placeholder="Send a message" />
-            </Window>
-          </div>
-          <Thread />
-        </Channel>
-      </Chat>
-    </div>
-  );
+  const filters = { members: { $in: [authUser._id] } };
+  const sort = { last_message_at: -1 };
+  const options = { limit: 10 };
+
+ return (
+   <div className="">
+     <Chat client={chatClient} theme="messaging dark">
+       <div className="flex h-[calc(100vh-80px)] overflow-hidden rounded-md shadow-md bg-base-100">
+         {/* Sidebar */}
+         <div className="w-[300px] h-full overflow-y-auto border-r">
+           <ChannelList
+             filters={filters}
+             sort={sort}
+             options={options}
+             Preview={(previewProps) => {
+               const members = previewProps.channel.state.members;
+               const otherMemberId = Object.keys(members).find(
+                 (id) => id !== authUser._id
+               );
+               const otherUser = members[otherMemberId]?.user;
+
+               return (
+                 <div
+                   className="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 cursor-pointer border-b"
+                   onClick={() => navigate(`/chat/${otherMemberId}`)}
+                 >
+                   <img
+                     src={otherUser?.image || "/default-avatar.png"}
+                     alt={otherUser?.name || "User"}
+                     className="w-10 h-10 rounded-full object-cover"
+                   />
+                   <div className="truncate">
+                     <p className="font-semibold">
+                       {otherUser?.name || "Unknown User"}
+                     </p>
+                     <p className="text-sm text-gray-500 truncate">
+                       {previewProps.latestMessagePreview || "No messages yet"}
+                     </p>
+                   </div>
+                 </div>
+               );
+             }}
+           />
+         </div>
+
+         {/* Main Chat Area */}
+         <div className="flex-1 h-full">
+           <Channel channel={chatChannel}>
+             <div className="w-full relative">
+               {/* <CallButton />  */}
+               <Window>
+                 <ChannelHeader />
+                 <MessageList />
+                 <MessageInput focus placeholder="Send a message" />
+               </Window>
+               <Thread />
+             </div>
+           </Channel>
+         </div>
+       </div>
+     </Chat>
+   </div>
+ );
+
 };
 
 export default ChatPage;

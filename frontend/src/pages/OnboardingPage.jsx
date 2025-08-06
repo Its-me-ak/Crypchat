@@ -65,7 +65,7 @@ const OnboardingPage = () => {
         </div>
 
         <div className="col-span-12 lg:col-span-8 xl:col-span-9">
-          <div className="rounded-2xl m-4 bg-white  xl:h-[calc(100vh-35px)] lg:h-[calc(100vh-5px)]">
+          <div className="rounded-2xl m-4 bg-white  h-full">
             <div className="flex flex-col h-full pt-5 px-6">
               <div className="flex justify-center my-auto">
                 <div>

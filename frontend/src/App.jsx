@@ -25,7 +25,7 @@ function App() {
   if (isLoading) return <Loader />;
 
   return (
-    <div className="h-screen" data-theme={theme}>
+    <div className="" data-theme={theme}>
       <Routes>
         <Route
           path="/"
