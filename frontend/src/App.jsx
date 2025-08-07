@@ -14,6 +14,7 @@ import Loader from "./components/Loader";
 import useAuthUser from "./hooks/useAuthUser";
 import Layout from "./components/Layout";
 import { useThemeStore } from "./store/useThemeStore";
+import ChatHomePage from "./pages/ChatHomePage";
 
 function App() {
   const { isLoading, authUser } = useAuthUser();
@@ -79,15 +80,13 @@ function App() {
           path="/call/:id"
           element={
             <ProtectedRoute isAuthenticated={isAuthenticated}>
-              {
-                isOnboarded ? (
-                  <Layout>
-                    <CallPage />
-                  </Layout>
-                ) : (
-                  <Navigate to="/onboarding" replace />
-                )
-              }
+              {isOnboarded ? (
+                <Layout>
+                  <CallPage />
+                </Layout>
+              ) : (
+                <Navigate to="/onboarding" replace />
+              )}
             </ProtectedRoute>
           }
         />
@@ -95,15 +94,27 @@ function App() {
           path="/chat/:id"
           element={
             <ProtectedRoute isAuthenticated={isAuthenticated}>
-             {
-              isOnboarded ? (
+              {isOnboarded ? (
                 <Layout>
                   <ChatPage />
                 </Layout>
               ) : (
                 <Navigate to="/onboarding" replace />
-              )
-             }
+              )}
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/chat"
+          element={
+            <ProtectedRoute isAuthenticated={isAuthenticated}>
+              {isOnboarded ? (
+                <Layout>
+                  <ChatHomePage />
+                </Layout>
+              ) : (
+                <Navigate to="/onboarding" replace />
+              )}
             </ProtectedRoute>
           }
         />

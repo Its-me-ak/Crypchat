@@ -31,13 +31,13 @@ const Sidebar = () => {
         </Link>
 
         <Link
-          to="/friends"
+          to="/chat"
           className={`btn btn-ghost justify-start w-full gap-3 px-3 normal-case ${
-            currentPath === "/friends" ? "btn-active" : ""
+            currentPath === "/chat" ? "btn-active" : ""
           }`}
         >
           <UserIcon className="size-5 text-base-content opacity-75" />
-          <span className="text-lg">Friends</span>
+          <span className="text-lg">Chat</span>
         </Link>
 
         <Link
@@ -65,8 +65,8 @@ const Sidebar = () => {
           <div className="flex-1">
             <h3 className="text-sm font-semibold">{authUser?.fullName}</h3>
             <p className="text-xs text-success items-center gap-1">
-                <span className="size-2 rounded-full bg-success inline-block mr-1"/>
-                Online
+              <span className="size-2 rounded-full bg-success inline-block mr-1" />
+              Online
             </p>
           </div>
         </div>
