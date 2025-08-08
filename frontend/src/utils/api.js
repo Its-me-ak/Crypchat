@@ -66,3 +66,15 @@ export const getStreamToken = async () => {
   const response = await axiosInstance.get("/chat/token");
   return response.data;
 }
+
+// forgot password
+export const forgotPassword = async (email) => {
+  const response = await axiosInstance.post("/auth/forgot-password", { email });
+  return response.data;
+};
+
+// Reset Password
+export const resetPassword = async (token, password) => {
+  const response = await axiosInstance.put(`/auth/reset-password/${token}`, { password });
+  return response.data;
+};

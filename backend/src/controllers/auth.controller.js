@@ -1,8 +1,11 @@
+import bcrypt from "bcryptjs";
 import User from "../models/user.model.js";
 import { apiError } from "../utils/apiError.js";
 import { apiResponse } from "../utils/apiResponse.js";
 import { generateTokenAndSetCookie } from "../utils/generateToken.js";
+import { sendResetEmail, sendResetSuccessEmail } from "../utils/sendEmail.js";
 import { upsertStreamUser } from "../utils/stream.js";
+import crypto from "crypto";
 
 export const signup = async (req, res) => {
   const { fullName, email, password } = req.body;
@@ -148,3 +151,66 @@ export const getUser = async (req, res) => {
     return apiError(res, 500, "Internal server error");
   }
 };
+
+// Forgot Password
+export const forgotPassword = async (req, res) => {
+  const { email } = req.body;
+  try {
+    if (!email) {
+      return apiError(res, 400, "Email is required");
+    }
+
+    const user = await User.findOne({ email });
+    if (!user) {
+      return apiError(res, 404, "User not found");
+    }
+    const resetToken = crypto.randomBytes(32).toString("hex");
+    const resetTokenExpireAt = Date.now() + 60 * 60 * 1000; // 1 hour
+
+    user.resetPasswordToken = resetToken;
+    user.resetPasswordExpireAt = resetTokenExpireAt;
+
+    await user.save();
+
+    const resetLink = `${process.env.CLIENT_URL}/reset-password/${resetToken}`;
+
+    await sendResetEmail(email, resetLink);
+
+    return apiResponse(res, 200, "Password reset email sent successfully");
+
+  } catch (error) {
+    console.error("Error in forgotPassword:", error);
+    return apiError(res, 500, "Internal server error");
+  }
+};
+
+// Reset Password
+export const resetPassword = async (req, res) => {
+  const { token } = req.params;
+  const { password } = req.body;
+  try {
+    if (!token || !password) {
+      return apiError(res, 400, "Token and password are required");
+    }
+
+    const user = await User.findOne({
+      resetPasswordToken: token,
+      resetPasswordExpireAt: { $gt: Date.now() }, // Check if token is still valid
+    });
+    if (!user) {
+      return apiError(res, 400, "Invalid or expired token");
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+    user.password = hashedPassword;
+    user.resetPasswordToken = undefined; // Clear the token
+    user.resetPasswordExpireAt = undefined; // Clear the expiration
+
+    await user.save();
+    await sendResetSuccessEmail(user.email);
+    return apiResponse(res, 200, "Password reset successfully");
+  } catch (error) {
+    console.error("Error in resetPassword:", error);
+    return apiError(res, 500, "Internal server error");
+  }
+}

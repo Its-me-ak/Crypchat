@@ -15,6 +15,7 @@ import useAuthUser from "./hooks/useAuthUser";
 import Layout from "./components/Layout";
 import { useThemeStore } from "./store/useThemeStore";
 import ChatHomePage from "./pages/ChatHomePage";
+import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 
 function App() {
   const { isLoading, authUser } = useAuthUser();
@@ -125,6 +126,11 @@ function App() {
               {!isOnboarded ? <OnboardingPage /> : <Navigate to="/" replace />}
             </ProtectedRoute>
           }
+        />
+        {/* Forgot password */}
+        <Route
+          path="/forgot-password"
+          element={<ForgotPasswordPage />}
         />
       </Routes>
       <Toaster />
