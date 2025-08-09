@@ -3,9 +3,9 @@ import { Link } from 'react-router';
 
 const Logo = () => {
   return (
-    <div className="">
+    <div className="text-center lg:text-left mb-2 lg:mb-0">
       <h3 className="text-white/90 text-2xl font-bold pb-1">
-        <Link to="/" className="flex items-end gap-3">
+        <Link to="/" className="flex items-end justify-center lg:justify-start gap-3">
           <MessageSquareText />
           CrypChat
         </Link>

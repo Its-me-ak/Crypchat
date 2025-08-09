@@ -25,9 +25,9 @@ const SignUpPage = () => {
     <div className="min-h-screen bg-cover bg-center bg-[#4eac6d]">
       <div className="grid grid-cols-12 gap-0">
         <div className="col-span-12 lg:col-span-4 xl:col-span-3">
-          <div className="p-6 pb-0 lg:p-12 flex flex-col h-screen">
+          <div className="p-6 pb-0 lg:p-12 flex flex-col lg:h-screen h-auto">
             <Logo />
-            <div className="mt-auto">
+            <div className="md:mt-auto mt-0 hidden lg:block">
               <img
                 src="/assets/img/auth-img.png"
                 alt="auth"
@@ -41,7 +41,7 @@ const SignUpPage = () => {
           <div className="rounded-2xl m-4 bg-white  xl:h-[calc(100vh-35px)] lg:h-[calc(100vh-5px)]">
             <div className="flex flex-col h-full pt-5 px-6">
               <div className="flex justify-center my-auto">
-                <div className="w-2/5">
+                <div className="w-full lg:w-2/5">
                   <div className="md:py-1 py-6">
                     <div className="text-center mb-10">
                       <h3 className="text-2xl text-[#495057] font-semibold">
@@ -113,7 +113,8 @@ const SignUpPage = () => {
                             }
                             required
                           />
-                          <span className="absolute inset-y-0 right-3 flex items-center text-gray-400 cursor-pointer"
+                          <span
+                            className="absolute inset-y-0 right-3 flex items-center text-gray-400 cursor-pointer"
                             onClick={togglePasswordVisibility}
                           >
                             {showPassword ? (
@@ -185,9 +186,9 @@ const SignUpPage = () => {
                   </div>
                 </div>
               </div>
-              <div className="flex w-full justify-center ">
-                <p className="mb-5 flex items-end text-center">
-                  © 2025 Crypchat. Created with
+              <div className="flex w-full justify-center whitespace-nowrap text-center">
+                <p className="mb-5 flex items-center whitespace-nowrap text-xs sm:text-sm">
+                  © 2025 Crypchat. Created with{" "}
                   <Heart className="text-red-700 mb-0.5 mx-1" size={16} />
                   by Mohd Aquib
                 </p>
