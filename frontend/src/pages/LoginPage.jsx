@@ -1,11 +1,12 @@
 import { Link } from "react-router";
 import Logo from "../components/Logo";
-import { Heart, Eye } from "lucide-react";
+import { Heart, Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
 import useLogin from "../hooks/useLogin";
+import usePasswordToggleVisibility from "../hooks/usePasswordToggleVisibility";
 
 const LoginPage = () => {
-
+  const  {showPassword, togglePasswordVisibility} = usePasswordToggleVisibility()
   const [loginData, setLoginData] = useState({
     email: "",
     password: "",
@@ -84,7 +85,7 @@ const LoginPage = () => {
                         </div>
                         <div className="relative">
                           <input
-                            type="password"
+                            type={showPassword ? "text" : "password"}
                             placeholder="Enter Password"
                             value={loginData.password}
                             className="w-full text-gray-500 bg-transparent px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 pr-10"
@@ -96,8 +97,14 @@ const LoginPage = () => {
                             }
                             required
                           />
-                          <span className="absolute inset-y-0 right-3 flex items-center text-gray-400 cursor-pointer">
-                            <Eye size={18} />
+                          <span className="absolute inset-y-0 right-3 flex items-center text-gray-400 cursor-pointer"
+                            onClick={togglePasswordVisibility}
+                          >
+                            {showPassword ? (
+                              <Eye size={18} />
+                            ) : (
+                              <EyeOff size={18} />
+                            )}
                           </span>
                         </div>
                       </div>

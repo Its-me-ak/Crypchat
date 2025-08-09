@@ -1,24 +1,26 @@
 import React, { useState } from "react";
 import { Link } from "react-router";
-import  {Heart, Eye } from "lucide-react";
+import { Heart, Eye, EyeOff } from "lucide-react";
 import Logo from "../components/Logo";
 import useSignUp from "../hooks/useSignUp";
+import usePasswordToggleVisibility from "../hooks/usePasswordToggleVisibility";
 
 const SignUpPage = () => {
-
+  const {showPassword, togglePasswordVisibility} = usePasswordToggleVisibility()
   const [signupData, setSignupData] = useState({
     fullName: "",
     email: "",
     password: "",
   });
 
-  const {signupMutation, isPending, error} = useSignUp()
+  const { signupMutation, isPending, error } = useSignUp();
 
   const handleSignUp = (e) => {
     e.preventDefault();
     signupMutation(signupData);
   };
-  
+
+
   return (
     <div className="min-h-screen bg-cover bg-center bg-[#4eac6d]">
       <div className="grid grid-cols-12 gap-0">
@@ -99,7 +101,7 @@ const SignUpPage = () => {
                         </div>
                         <div className="relative">
                           <input
-                            type="password"
+                            type={showPassword ? "text" : "password"}
                             placeholder="Enter Password"
                             value={signupData.password}
                             className="w-full text-gray-500 bg-transparent px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 pr-10"
@@ -111,8 +113,14 @@ const SignUpPage = () => {
                             }
                             required
                           />
-                          <span className="absolute inset-y-0 right-3 flex items-center text-gray-400 cursor-pointer">
-                            <Eye size={18} />
+                          <span className="absolute inset-y-0 right-3 flex items-center text-gray-400 cursor-pointer"
+                            onClick={togglePasswordVisibility}
+                          >
+                            {showPassword ? (
+                              <Eye size={18} />
+                            ) : (
+                              <EyeOff size={18} />
+                            )}
                           </span>
                         </div>
 

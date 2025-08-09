@@ -4,14 +4,12 @@ import { EyeOff, Eye, Heart } from "lucide-react";
 import { resetPassword } from "../utils/api";
 import toast from "react-hot-toast";
 import { useNavigate, useParams } from "react-router";
-// import useAuthUser from "../hooks/useAuthUser";
+import usePasswordToggleVisibility from "../hooks/usePasswordToggleVisibility";
 
 const ResetPasswordPage = () => {
-//   const { authUser } = useAuthUser();
+  const {showPassword, showConfirmPassword, togglePasswordVisibility, toggleConfirmPasswordVisibility} = usePasswordToggleVisibility()
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const { token } = useParams();
   const navigate = useNavigate();
@@ -36,10 +34,6 @@ const ResetPasswordPage = () => {
       setIsLoading(false);
     }
   };
-
-  const togglePasswordVisibility = () => setShowPassword((prev) => !prev);
-  const toggleConfirmPasswordVisibility = () =>
-    setShowConfirmPassword((prev) => !prev);
 
   return (
     <div className="min-h-screen bg-cover bg-center bg-[#4eac6d]">
