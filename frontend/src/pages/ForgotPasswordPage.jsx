@@ -37,9 +37,9 @@ const ForgotPasswordPage = () => {
     <div className="min-h-screen bg-cover bg-center bg-[#4eac6d]">
       <div className="grid grid-cols-12 gap-0">
         <div className="col-span-12 lg:col-span-4 xl:col-span-3">
-          <div className="p-6 pb-0 lg:p-12 flex flex-col h-screen">
+          <div className="p-6 pb-0 lg:p-12 flex flex-col lg:h-screen h-full">
             <Logo />
-            <div className="mt-auto">
+            <div className="md:mt-auto mt-0 hidden lg:block">
               <img
                 src="/assets/img/auth-img.png"
                 alt="auth"
@@ -53,7 +53,7 @@ const ForgotPasswordPage = () => {
           <div className="rounded-2xl m-4 bg-white  xl:h-[calc(100vh-35px)] lg:h-[calc(100vh-5px)]">
             <div className="flex flex-col h-full pt-5 px-6">
               <div className="flex justify-center my-auto">
-                <div className="w-2/5">
+                <div className="w-full lg:w-2/5">
                   <div className="md:py-1 py-6">
                     <div className="text-center mb-6">
                       <h3 className="text-2xl text-[#495057] font-semibold">
@@ -102,7 +102,6 @@ const ForgotPasswordPage = () => {
                           <span className="text-sm text-gray-500">Or</span>
                           <hr className="flex-grow border-gray-300" />
                         </div>
-
                       </form>
                     ) : (
                       <div className="flex flex-col items-center text-center">
@@ -111,10 +110,10 @@ const ForgotPasswordPage = () => {
                           If an account exists for {email}, you will receive a
                           password reset link shortly.
                         </p>
-                          <p className="text-base-content mt-2">
-                            If you don't see it in your inbox, please check your
-                            Spam or Junk folder.
-                          </p>
+                        <p className="text-base-content mt-2">
+                          If you don't see it in your inbox, please check your
+                          Spam or Junk folder.
+                        </p>
                       </div>
                     )}
                   </div>
@@ -129,10 +128,10 @@ const ForgotPasswordPage = () => {
                   </div>
                 </div>
               </div>
-              <div className="flex w-full justify-center ">
-                <p className="mb-5 flex items-end text-center">
+              <div className="flex w-full justify-center whitespace-nowrap text-center">
+                <p className="mb-5 flex items-center whitespace-nowrap text-xs sm:text-sm">
                   © 2025 Crypchat. Created with{" "}
-                  <Heart className="text-red-700 mb-1 mx-0.5" size={16} />
+                  <Heart className="text-red-700 -mb-1 lg:mb-0.5 mx-1" size={16} />
                   by Mohd Aquib
                 </p>
               </div>

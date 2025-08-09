@@ -39,9 +39,9 @@ const ResetPasswordPage = () => {
     <div className="min-h-screen bg-cover bg-center bg-[#4eac6d]">
       <div className="grid grid-cols-12 gap-0">
         <div className="col-span-12 lg:col-span-4 xl:col-span-3">
-          <div className="p-6 pb-0 lg:p-12 flex flex-col h-screen">
+          <div className="p-6 pb-0 lg:p-12 flex flex-col h-full lg:h-screen">
             <Logo />
-            <div className="mt-auto">
+            <div className="md:mt-auto mt-0 hidden lg:block">
               <img
                 src="/assets/img/auth-img.png"
                 alt="auth"
@@ -52,10 +52,10 @@ const ResetPasswordPage = () => {
         </div>
 
         <div className="col-span-12 lg:col-span-8 xl:col-span-9">
-          <div className="rounded-2xl m-4 bg-white  xl:h-[calc(100vh-35px)] lg:h-[calc(100vh-5px)]">
+          <div className="rounded-2xl m-4 bg-white h-[82vh] xl:h-[calc(100vh-35px)] lg:h-[calc(100vh-5px)]">
             <div className="flex flex-col h-full pt-5 px-6">
               <div className="flex justify-center my-auto">
-                <div className="w-2/5">
+                <div className="w-full lg:w-2/5">
                   <div className="md:py-1 py-6">
                     <div className="text-center mb-10">
                       <h3 className="text-2xl text-[#495057] font-semibold">
@@ -63,19 +63,6 @@ const ResetPasswordPage = () => {
                       </h3>
                       <p className="text-[#495057]/60 mt-1"></p>
                     </div>
-                    {/* <div className="flex flex-col items-center">
-                      <div className="avatar">
-                        <div className="w-24 rounded-full">
-                          <img
-                            src={authUser.profilePic}
-                            alt={authUser.fullName}
-                          />
-                        </div>
-                      </div>
-                      <h3 className="font-semibold text-base-content my-2">
-                        {authUser.fullName}
-                      </h3>
-                    </div> */}
                     <form className="space-y-5" onSubmit={handleSubmit}>
                       {/* New Password */}
                       <div>
@@ -98,13 +85,9 @@ const ResetPasswordPage = () => {
                             onClick={togglePasswordVisibility}
                           >
                             {showPassword ? (
-                              <Eye
-                                size={18}
-                              />
+                              <Eye size={18} />
                             ) : (
-                              <EyeOff
-                                size={18}
-                              />
+                              <EyeOff size={18} />
                             )}
                           </span>
                         </div>
@@ -131,15 +114,9 @@ const ResetPasswordPage = () => {
                             onClick={toggleConfirmPasswordVisibility}
                           >
                             {showConfirmPassword ? (
-                              <Eye
-                                size={18}
-        
-                              />
+                              <Eye size={18} />
                             ) : (
-                              <EyeOff
-                                size={18}
-                            
-                              />
+                              <EyeOff size={18} />
                             )}
                           </span>
                         </div>

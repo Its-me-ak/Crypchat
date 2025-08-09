@@ -153,7 +153,7 @@ const LoginPage = () => {
               <div className="flex w-full justify-center whitespace-nowrap text-center">
                 <p className="mb-5 flex items-center whitespace-nowrap text-xs sm:text-sm">
                   © 2025 Crypchat. Created with{" "}
-                  <Heart className="text-red-700 mb-0.5 mx-1" size={16} />
+                  <Heart className="text-red-700 -mb-1 lg:mb-0.5 mx-1" size={16} />
                   by Mohd Aquib
                 </p>
               </div>
