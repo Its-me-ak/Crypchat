@@ -168,7 +168,7 @@ export const forgotPassword = async (req, res) => {
     const resetTokenExpireAt = Date.now() + 60 * 60 * 1000; // 1 hour
 
     user.resetPasswordToken = resetToken;
-    user.resetPasswordExpireAt = resetTokenExpireAt;
+    user.resetPasswordExpiresAt = resetTokenExpireAt;
 
     await user.save();
 
@@ -195,16 +195,15 @@ export const resetPassword = async (req, res) => {
 
     const user = await User.findOne({
       resetPasswordToken: token,
-      resetPasswordExpireAt: { $gt: Date.now() }, // Check if token is still valid
+      resetPasswordExpiresAt: { $gt: Date.now() }, // Check if token is still valid
     });
     if (!user) {
       return apiError(res, 400, "Invalid or expired token");
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
-    user.password = hashedPassword;
+    user.password = password;
     user.resetPasswordToken = undefined; // Clear the token
-    user.resetPasswordExpireAt = undefined; // Clear the expiration
+    user.resetPasswordExpiresAt = undefined; // Clear the expiration
 
     await user.save();
     await sendResetSuccessEmail(user.email);

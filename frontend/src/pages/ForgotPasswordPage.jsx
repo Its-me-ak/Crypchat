@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Logo from "../components/Logo";
 import { Link } from "react-router";
-import { Heart, Mail } from "lucide-react";
+import { ArrowLeft, Heart, Mail } from "lucide-react";
 import { forgotPassword } from "../utils/api";
 import { toast } from "react-hot-toast";
 
@@ -103,31 +103,29 @@ const ForgotPasswordPage = () => {
                           <hr className="flex-grow border-gray-300" />
                         </div>
 
-                        {/* Login Link */}
-                        <p className="text-center text-sm text-gray-600 mt-3">
-                          Remember it?{" "}
-                          <Link
-                            to="/login"
-                            className="text-green-600 font-medium hover:underline"
-                          >
-                            Login
-                          </Link>
-                        </p>
                       </form>
                     ) : (
                       <div className="flex flex-col items-center text-center">
                         <Mail className="h-8 w-8" />
-                        <p className="my-2">
-                          If an account exists for {email}, you will
-                          receive a password reset link shortly.
-                          <br />
-                          <span className="text-gray-500">
+                        <p className="my-2 text-base-content">
+                          If an account exists for {email}, you will receive a
+                          password reset link shortly.
+                        </p>
+                          <p className="text-base-content mt-2">
                             If you don't see it in your inbox, please check your
                             Spam or Junk folder.
-                          </span>
-                        </p>
+                          </p>
                       </div>
                     )}
+                  </div>
+
+                  <div className="px-8 py-4 flex justify-center">
+                    <Link
+                      to={"/login"}
+                      className="text-sm text-green-600 hover:underline flex items-center"
+                    >
+                      <ArrowLeft className="h-4 w-4 mr-2" /> Back to Login
+                    </Link>
                   </div>
                 </div>
               </div>

@@ -47,6 +47,8 @@ const userSchema = new Schema(
         ref: "User",
       },
     ],
+    resetPasswordToken: String,
+    resetPasswordExpiresAt: Date,
   },
   {
     timestamps: true,

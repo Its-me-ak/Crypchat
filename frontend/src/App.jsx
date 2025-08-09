@@ -16,6 +16,7 @@ import Layout from "./components/Layout";
 import { useThemeStore } from "./store/useThemeStore";
 import ChatHomePage from "./pages/ChatHomePage";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
+import ResetPasswordPage from "./pages/ResetPasswordPage";
 
 function App() {
   const { isLoading, authUser } = useAuthUser();
@@ -127,11 +128,10 @@ function App() {
             </ProtectedRoute>
           }
         />
-        {/* Forgot password */}
-        <Route
-          path="/forgot-password"
-          element={<ForgotPasswordPage />}
-        />
+        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+        <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
+        {/* catch all routes */}
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
       <Toaster />
     </div>
