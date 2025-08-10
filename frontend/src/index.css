@@ -34,7 +34,7 @@
 }
 
 /* Responsive styles */
-@media (max-width: 768px) {
+@media (max-width: 991px) {
     .str-chat__container {
         max-height: 100% !important;
     }
