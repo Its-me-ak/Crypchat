@@ -7,9 +7,11 @@ const ThemeSelector = () => {
 
   return (
     <div className="dropdown dropdown-end">
-      <button tabIndex={0} className="btn btn-ghost btn-circle">
-        <PaletteIcon className="size-5" />
-      </button>
+      <div className="tooltip tooltip-bottom" data-tip="Theme">
+        <button tabIndex={0} className="btn btn-ghost btn-circle">
+          <PaletteIcon className="size-5" />
+        </button>
+      </div>
 
       <div
         tabIndex={0}
