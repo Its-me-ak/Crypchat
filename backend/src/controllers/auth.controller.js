@@ -1,5 +1,5 @@
 import bcrypt from "bcryptjs";
-import User from "../models/user.model.js";
+import User from "../models/User.model.js";
 import { apiError } from "../utils/apiError.js";
 import { apiResponse } from "../utils/apiResponse.js";
 import { generateTokenAndSetCookie } from "../utils/generateToken.js";
@@ -116,12 +116,16 @@ export const onboarding = async (req, res) => {
     ) {
       return apiError(res, 400, "All fields are required");
     }
-    const updatedUser = await User.findByIdAndUpdate(userId, {
-      ...req.body,
-      isOnboarded: true,
-    }, { new: true });
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      {
+        ...req.body,
+        isOnboarded: true,
+      },
+      { new: true }
+    );
 
-    if(!updatedUser) {
+    if (!updatedUser) {
       return apiError(res, 400, "Failed to update user");
     }
 
@@ -129,10 +133,9 @@ export const onboarding = async (req, res) => {
       id: updatedUser._id.toString(),
       name: updatedUser.fullName,
       profilePic: updatedUser.profilePic,
-    })
+    });
 
     return apiResponse(res, 200, "Onboarding successful", updatedUser);
-
   } catch (error) {
     console.log(error);
     return apiError(res, 500, "Internal server error");
@@ -177,7 +180,6 @@ export const forgotPassword = async (req, res) => {
     await sendResetEmail(email, resetLink);
 
     return apiResponse(res, 200, "Password reset email sent successfully");
-
   } catch (error) {
     console.error("Error in forgotPassword:", error);
     return apiError(res, 500, "Internal server error");
@@ -212,4 +214,4 @@ export const resetPassword = async (req, res) => {
     console.error("Error in resetPassword:", error);
     return apiError(res, 500, "Internal server error");
   }
-}
+};
