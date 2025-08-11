@@ -8,7 +8,6 @@ export const protectedRoute = async (req, res, next) => {
     if (!token) {
       return apiError(res, 401, "Unauthorized - No token provided");
     }
-<<<<<<< HEAD
 
     const decodedToken = jwt.verify(token, process.env.JWT_SECRET_KEY);
     if (!decodedToken) {
@@ -26,6 +25,4 @@ export const protectedRoute = async (req, res, next) => {
     console.log(error);
     return apiError(res, 500, "Internal server error");
   }
-=======
->>>>>>> d0d61b25dd0108d6ecf703bdd52b38fd60e969c2
 };
