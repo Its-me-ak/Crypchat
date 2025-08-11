@@ -1,5 +1,5 @@
 import FriendRequest from "../models/FriendRequest.model.js";
-import User from "../models/user.model.js";
+import User from "../models/User.model.js";
 import { apiError } from "../utils/apiError.js";
 import { apiResponse } from "../utils/apiResponse.js";
 
