@@ -118,7 +118,7 @@ const ChatHomePage = () => {
                     <span className="font-semibold">
                       {otherUser?.name || "Unknown User"}
                     </span>
-                    <span className="text-sm text-gray-500 truncate">
+                    <span className="text-sm text-gray-500 truncate w-[190px]">
                       {previewProps.latestMessagePreview || "No messages yet"}
                     </span>
                   </div>

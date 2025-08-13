@@ -3,13 +3,16 @@ import useAuthUser from "../hooks/useAuthUser";
 import { Link, useLocation } from "react-router";
 import { BellIcon, HomeIcon, MessageSquareText, UserIcon } from "lucide-react";
 
-const Sidebar = () => {
+const Sidebar = ({ isMobile = false }) => {
   const { authUser } = useAuthUser();
   const location = useLocation();
   const currentPath = location.pathname;
 
   return (
-    <div className="w-64 bg-base-200 border-r border-base-300 hidden lg:flex flex-col h-screen sticky top-0">
+    <div
+      className={`w-64 bg-base-200 border-r border-base-300 flex flex-col h-screen sticky top-0
+        ${isMobile ? "" : "hidden lg:flex"}`}
+    >
       <div className="px-5 py-3 border-b border-base-300">
         <Link to="/" className="flex items-center gap-2">
           <MessageSquareText className="size-9 text-primary" />
