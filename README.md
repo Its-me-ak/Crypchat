@@ -145,7 +145,3 @@ In `backend/src/server.js`:
 
 - Serves `../frontend/dist` when `NODE_ENV === "production"`
 - API under `/api/v1/*`
-
-Typical Render setup:
-
-- **Build command (root
