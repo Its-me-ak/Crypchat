@@ -7,24 +7,12 @@ import cookieParser from "cookie-parser";
 import { connectDB } from "./config/db.js";
 import cors from "cors";
 import path from "path";
-import cron from "node-cron"
-import axios from "axios";
 
 const app = express();
 
 const PORT = process.env.PORT || 5000;
 
 const __dirname = path.resolve();
-
-// ping server for every 14 minutes
-cron.schedule("*/14 * * * *", async () => {
-  try {
-    const response = await axios.get("https://crypchat.onrender.com");
-    console.log("Pinged server to keep it awake:", response.status);
-  } catch (error) {
-    console.error("Error pinging server:", error.message);
-  }
-});
 
 app.use(
   cors({
